@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "2.2.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.neuecc.unirx": {
+      "version": "7.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.2d.animation": {
       "version": "5.0.9",
       "depth": 0,
