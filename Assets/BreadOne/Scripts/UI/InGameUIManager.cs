@@ -92,8 +92,8 @@ namespace cngamejam{
 
         async void PulseCatchedEnemy()
         {
-            await transformCatchedEnemy?.transform?.DOScale(1.2f, 0.15f).AsyncWaitForCompletion();
-            await transformCatchedEnemy?.transform?.DOScale(1f, 0.1f).AsyncWaitForCompletion();
+            await transformCatchedEnemy.transform.DOScale(1.2f, 0.15f).AsyncWaitForCompletion();
+            await transformCatchedEnemy.transform.DOScale(1f, 0.1f).AsyncWaitForCompletion();
         }
 
         void RemoveHP(int hp)

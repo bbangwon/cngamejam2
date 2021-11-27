@@ -40,7 +40,7 @@ namespace cngamejam{
 
         private void Start()
         {
-            ShowTitle2();
+            ShowTitle2().AttachExternalCancellation(cts.Token);
         }
 
         async void ShowTitle()
@@ -51,34 +51,41 @@ namespace cngamejam{
         }
 
 
-        async void ShowTitle2()
+        async UniTask ShowTitle2()
         {
-            pleaseAnyKey.DOFade(0f, 0f);
-            player.transform.DOMoveY(-1100f, 0f);
-            Enemy.transform.DOMoveY(-500f, 0f);
-            title_1.transform.DOMoveX(-1600f, 0f);
-            title_2.transform.DOScaleY(0f, 0f);
-            light.DOFade(0f, 0f);
+            try
+            {
+                pleaseAnyKey.DOFade(0f, 0f);
+                player.transform.DOMoveY(-1100f, 0f);
+                Enemy.transform.DOMoveY(-500f, 0f);
+                title_1.transform.DOMoveX(-1600f, 0f);
+                title_2.transform.DOScaleY(0f, 0f);
+                light.DOFade(0f, 0f);
 
-            await blackImage.DOFade(0f, 2f).AsyncWaitForCompletion();
+                await blackImage.DOFade(0f, 2f).AsyncWaitForCompletion();
 
-            SoundManager.Instance.PlayBGM("00_title");
+                SoundManager.Instance.PlayBGM("00_title");
 
-            player.transform.DOMoveY(540f, 1f).SetEase(Ease.InQuad);
+                player.transform.DOMoveY(540f, 1f).SetEase(Ease.InQuad);
 
-            await Enemy.transform.DOMoveY(540f - 248f, 1f).SetDelay(0.5f).SetEase(Ease.InQuad).AsyncWaitForCompletion();
+                await Enemy.transform.DOMoveY(540f - 248f, 1f).SetDelay(0.5f).SetEase(Ease.InQuad).AsyncWaitForCompletion();
 
-            await title_1.transform.DOMoveX(960f - 310f, 1f).AsyncWaitForCompletion();
+                await title_1.transform.DOMoveX(960f - 310f, 1f).AsyncWaitForCompletion();
 
-            SwitchTitle().AttachExternalCancellation(cts.Token).Forget();
-            
-            light.DOFade(1f, 0.1f).SetDelay(0.5f);
+                SwitchTitle().AttachExternalCancellation(cts.Token).Forget();
 
-
-            pleaseAnyKey.DOFade(1f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+                light.DOFade(1f, 0.1f).SetDelay(0.5f);
 
 
-            interactable = true;
+                pleaseAnyKey.DOFade(1f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+
+
+                interactable = true;
+            } catch(OperationCanceledException e)
+            {
+                if (e.CancellationToken == cts.Token)
+                    return;
+            }
         }
 
 
