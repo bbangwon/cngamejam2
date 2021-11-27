@@ -13,6 +13,8 @@ namespace cngamejam
 
         SpriteRenderer active_map, hide_map;
 
+        public float amount = 1f;
+
         private void Start()
         {
             InitMap();
@@ -49,7 +51,7 @@ namespace cngamejam
             active_map = hide_map;
             hide_map = temp;
 
-            hide_map.transform.localPosition = new Vector3(active_map.sprite.bounds.size.x, 0f, 0f);
+            hide_map.transform.localPosition = new Vector3(active_map.sprite.bounds.size.x * amount, 0f, 0f);
         }
     }
 

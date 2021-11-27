@@ -458,6 +458,7 @@ MonoBehaviour:
   Map_2: {fileID: 1498093805}
   Speed: 7
   Scroll: 1
+  amount: 1
 --- !u!1 &302955761
 GameObject:
   m_ObjectHideFlags: 0
@@ -2173,6 +2174,7 @@ MonoBehaviour:
   Map_2: {fileID: 967435699}
   Speed: 5
   Scroll: 1
+  amount: 0.99
 --- !u!1 &1718047149
 GameObject:
   m_ObjectHideFlags: 0
@@ -2798,6 +2800,7 @@ MonoBehaviour:
   Map_2: {fileID: 1741406644}
   Speed: 10
   Scroll: 1
+  amount: 1
 --- !u!1 &2140326100
 GameObject:
   m_ObjectHideFlags: 0
