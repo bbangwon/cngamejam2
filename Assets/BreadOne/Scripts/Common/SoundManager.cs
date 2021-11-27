@@ -44,5 +44,10 @@ namespace cngamejam{
                 bgmSource.Play();
             }
         }
+
+        public void StopBGM()
+        {
+            bgmSource.Stop();
+        }
     }
 }

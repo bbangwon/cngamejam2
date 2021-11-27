@@ -108,6 +108,8 @@ namespace cngamejam{
 
         void ShowResult()
         {
+            SoundManager.Instance.StopBGM();
+            SoundManager.Instance.Play("02_result");
             result.SetActive(true);
 
             resultText.text = $"당신은 총 {Player.Instance.CatchedEnemys.Value}마리의 악귀를\n지옥행 급행열차에 태웠습니다.";

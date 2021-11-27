@@ -221,6 +221,16 @@ public class Villain : MonoBehaviour
         }
 
         isAttack = true;
+
+        if(attackType == EAttackType.Short)
+        {
+            SoundManager.Instance.Play("05_atk_enemy_melee");
+        }
+        else
+        {
+            SoundManager.Instance.Play("06_atk_ememy_range");
+        }
+        
         ChangeSpineAnim("attack", false);
     }
 
