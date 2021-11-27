@@ -62,11 +62,6 @@ namespace cngamejam{
         void Update()
         {
             moveVector = Input.GetAxis("Horizontal");
-
-            if(moveVector != 0)
-            {
-                Debug.Log(moveVector);
-            }
         }
     }
 
