@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using cngamejam;
 
 public class Spawner : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class Spawner : MonoBehaviour
         {
             spawnWaitTime = 0;
 
-            Villain villain = SpawnOrNull(cngamejam.Player.Instance.transform.position);
+            Villain villain = SpawnOrNull(Player.Instance.transform.position);
             
             if (villain == null)
                 return;

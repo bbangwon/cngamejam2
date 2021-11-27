@@ -73,6 +73,9 @@ public class Villain : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (Player.Instance.State == Player.States.DEAD)
+            return;
+
         if (isJump)
         {
             CheckGround();
@@ -174,7 +177,7 @@ public class Villain : MonoBehaviour
 
     public void Approach()
     {
-        if (cngamejam.Player.Instance == null)
+        if (Player.Instance == null)
             return;
 
         if (IsPlayer())
@@ -195,7 +198,7 @@ public class Villain : MonoBehaviour
         if (IsPlayer() == false)
             ChangeAction(EVillainAction.Approach);
 
-        Vector3 attackDir = transform.position.x > cngamejam.Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 attackDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
         if (attackDir == Vector3.right)
             spineAnim.transform.localScale = new Vector3(-1f, 1f);
         else
@@ -204,7 +207,7 @@ public class Villain : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
         if (hit.collider != null)
         {
-            hit.collider.GetComponent<cngamejam.Player>().Damage();
+            hit.collider.GetComponent<Player>().Damage();
 
             if (attackType == EAttackType.Long)
             {
@@ -236,7 +239,7 @@ public class Villain : MonoBehaviour
         {
             ChangeSpineAnim("hit", false);
 
-            float pushValue = transform.position.x > cngamejam.Player.Instance.transform.position.x ? pushPower : -pushPower;
+            float pushValue = transform.position.x > Player.Instance.transform.position.x ? pushPower : -pushPower;
             transform.DOLocalMoveX(transform.localPosition.x + pushValue, 0.1f).SetLoops(2, LoopType.Yoyo);
         }
         return false;
@@ -250,7 +253,7 @@ public class Villain : MonoBehaviour
         ChangeAction(EVillainAction.Dead);
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
 
-        float pushValue = transform.position.x > cngamejam.Player.Instance.transform.position.x ? pushPower : -pushPower;
+        float pushValue = transform.position.x > Player.Instance.transform.position.x ? pushPower : -pushPower;
         rb.freezeRotation = false;
         rb.AddTorque(pushValue * 2f, ForceMode2D.Impulse);
     }
@@ -265,7 +268,7 @@ public class Villain : MonoBehaviour
 
     bool IsTrain()
     {
-        Vector3 moveDir = transform.position.x > cngamejam.Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
 
         Ray2D ray = new Ray2D(transform.position + moveDir * rayDistance, Vector2.down);
         RaycastHit2D[] hits = Physics2D.RaycastAll(ray.origin, ray.direction);
@@ -287,13 +290,13 @@ public class Villain : MonoBehaviour
 
     private void OnGUI()
     {
-        Vector2 moveDir = transform.position.x > cngamejam.Player.Instance.transform.position.x ? Vector2.left : Vector2.right;
+        Vector2 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector2.left : Vector2.right;
         Debug.DrawRay(transform.position, moveDir * attackRange);
     }
 
     bool IsPlayer()
     {
-        Vector2 moveDir = transform.position.x > cngamejam.Player.Instance.transform.position.x ? Vector2.left : Vector2.right;
+        Vector2 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector2.left : Vector2.right;
 
         RaycastHit2D hits = Physics2D.Raycast(transform.position, moveDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
 
@@ -323,7 +326,7 @@ public class Villain : MonoBehaviour
 
     void Walk()
     {
-        Vector3 moveDir = transform.position.x > cngamejam.Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
 
         if (moveDir == Vector3.right)
             spineAnim.transform.localScale = new Vector3(-1f, 1f);
@@ -339,7 +342,7 @@ public class Villain : MonoBehaviour
     {
         EditorDebug.Log("[ºô·±] Jump");
         isJump = true;
-        Vector2 jumpDir = transform.position.x > cngamejam.Player.Instance.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
+        Vector2 jumpDir = transform.position.x > Player.Instance.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
         rb.AddForce(jumpDir * jumpPower, ForceMode2D.Impulse);
     }
 
@@ -352,10 +355,10 @@ public class Villain : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (cngamejam.Player.Instance == null)
+        if (Player.Instance == null)
             return;
 
-        Vector3 moveDir = transform.position.x > cngamejam.Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
 
         if (coll != null)
         {
