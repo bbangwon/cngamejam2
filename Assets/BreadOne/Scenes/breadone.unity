@@ -863,7 +863,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 459187462}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 2.22, z: 0}
+  m_LocalPosition: {x: 0, y: 2.22, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 1039360550}
@@ -2668,6 +2668,7 @@ MonoBehaviour:
   - {fileID: 3950611656204016048, guid: e5b0142fdbd134dcd923990670352032, type: 3}
   - {fileID: 6962968678432286298, guid: 56226ab418cd946fe8b16901a7357d6b, type: 3}
   - {fileID: 3145706552972476442, guid: 7e3d8134130504faa941824f49a5a9f6, type: 3}
+  skillEffectPrefab: {fileID: 5496081669812179908, guid: 7cd7149bc30ec42c395e81a30ab55308, type: 3}
 --- !u!1 &2047724139
 GameObject:
   m_ObjectHideFlags: 0

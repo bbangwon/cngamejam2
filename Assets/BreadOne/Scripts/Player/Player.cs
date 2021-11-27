@@ -245,6 +245,16 @@ namespace cngamejam
                 if (caveSkills > 0)
                 {
                     caveSkills--;
+
+                    skeletonAnimation.GetComponent<MeshRenderer>().sortingLayerName = "Effect";
+                    skeletonAnimation.GetComponent<MeshRenderer>().sortingOrder = 11;
+
+                    await EffectManager.Instance.SpawnSkillEffect();
+
+                    skeletonAnimation.GetComponent<MeshRenderer>().sortingLayerName = "Player";
+                    skeletonAnimation.GetComponent<MeshRenderer>().sortingOrder = 0;
+
+
                     RemoveCaveSkill.Invoke(caveSkills);
                     SoundManager.Instance.Play("09_skill_train");
 

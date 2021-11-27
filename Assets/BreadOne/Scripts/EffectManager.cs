@@ -13,7 +13,12 @@ namespace cngamejam{
         [SerializeField]
         GameObject[] attackEffectPrefabs;
 
+        [SerializeField]
+        GameObject skillEffectPrefab;
+
         List<(LeanGameObjectPool pool, float animTime)> attackEffectPools = new List<(LeanGameObjectPool pool, float animTime)>();
+
+        
 
         private void Awake()
         {
@@ -42,6 +47,14 @@ namespace cngamejam{
 
             pool.pool.Despawn(spawnEffect);
             
+        }
+
+        public async UniTask SpawnSkillEffect()
+        {
+            GameObject spawnEffect = Instantiate(skillEffectPrefab, transform);
+            spawnEffect.transform.position = Vector3.zero;
+            await UniTask.Delay(500);
+            Destroy(spawnEffect);
         }
     }
 }
