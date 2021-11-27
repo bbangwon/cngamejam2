@@ -57,7 +57,7 @@ public class Villain : MonoBehaviour
     [SerializeField] bool isAttack = false;
     
     [SerializeField]
-    GameObject player; // 임시 더미 값, 참조 얻어와야 한다.
+    GameObject player; // ???? ???? ??, ???? ???????? ????.
 
     private void Awake()
     {
@@ -125,7 +125,7 @@ public class Villain : MonoBehaviour
 
     public void ChangeAction(EVillainAction nextAction)
     {
-        EditorDebug.LogFormat("[빌런] ChangeAction, {0} -> {1}", action, nextAction);
+        EditorDebug.LogFormat("[????] ChangeAction, {0} -> {1}", action, nextAction);
         action = nextAction;
 
         switch(action)
@@ -162,13 +162,13 @@ public class Villain : MonoBehaviour
         if (spawnType == ESpawnType.Downstairs)
         {
             transform.Translate(Vector2.up * Time.deltaTime * MoveSpeed);
-            if (transform.position.y > 1.4f) // 임의값 하드코딩
+            if (transform.position.y > 1.4f) // ?????? ????????
                 SpawnFinish();
         }
         else // Upstairs
         {
             transform.Translate(Vector2.down * Time.deltaTime * MoveSpeed);
-            if (transform.position.y < 1.6f) // 임의값 하드코딩
+            if (transform.position.y < 1.6f) // ?????? ????????
                 SpawnFinish();
         }
 
@@ -216,6 +216,7 @@ public class Villain : MonoBehaviour
 
     public void GetDemage()
     {
+        Debug.Log("GetDamage");
         HP--;
 
         if (HP <= 0)
@@ -232,7 +233,7 @@ public class Villain : MonoBehaviour
     {
         ChangeAction(EVillainAction.Dead);
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
-        //Destroy(gameObject, 1f); // 임시로 1초 // dead 시간 동안 대기
+        //Destroy(gameObject, 1f); // ?????? 1?? // dead ???? ???? ????
     }
 
     bool IsTrain()
@@ -288,12 +289,12 @@ public class Villain : MonoBehaviour
 
         //rb.MovePosition(transform.position + moveDir * MoveSpeed * Time.deltaTime);
         transform.Translate(moveDir * MoveSpeed * Time.deltaTime);
-        EditorDebug.Log("[빌런] Walk");
+        EditorDebug.Log("[????] Walk");
     }
 
     void Jump()
     {
-        EditorDebug.Log("[빌런] Jump");
+        EditorDebug.Log("[????] Jump");
         isJump = true;
         Vector2 jumpDir = transform.position.x > player.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
         rb.AddForce(jumpDir * jumpPower, ForceMode2D.Impulse);

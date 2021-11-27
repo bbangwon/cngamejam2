@@ -822,6 +822,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3a7a5e6600c6247e9a4aa4040d4ccf95, type: 2}
   - {fileID: 11400000, guid: 5558b327a54624b27a8793e67abe783b, type: 2}
   - {fileID: 11400000, guid: bd97c509a3de842d884ecba6102105f4, type: 2}
+  attackRange: 2
 --- !u!114 &459187465
 MonoBehaviour:
   m_ObjectHideFlags: 0

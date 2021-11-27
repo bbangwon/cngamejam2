@@ -49,11 +49,10 @@ namespace cngamejam{
                 Instantiate(cavePrefab, transformCaves);
             }
 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
+            Player.Instance.CatchedEnemys.Subscribe(catchedEnemys =>
+            {
+                textCatchedEnemy.text = $"x{catchedEnemys}";
+            });
 
         }
 

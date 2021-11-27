@@ -23,6 +23,12 @@ namespace cngamejam
             DEAD
         }
 
+        public enum Directions
+        {
+            Left,
+            Right
+        }
+
         [SerializeField]
         int maxHp;
 
@@ -48,7 +54,7 @@ namespace cngamejam
 
         [SerializeField]
         float caveDespawnX;
- 
+
         CharacterController2D characterController;
 
         SkeletonAnimation skeletonAnimation;
@@ -59,6 +65,25 @@ namespace cngamejam
         AnimationReferenceAsset[] animationReferenceAssets;
 
         public float MoveValuePerFrame => characterController.MoveValuePerFrame;
+
+        public Directions Direction => (skeletonAnimation.Skeleton.ScaleX > 0) ? Directions.Left : Directions.Right;
+
+        [SerializeField]
+        float attackRange;
+
+        
+
+        private void OnGUI()
+        {
+            if(Direction == Directions.Left)
+            {
+                Debug.DrawRay(transform.position, (transform.right * -1f) * attackRange);
+            }
+            else
+            {
+                Debug.DrawRay(transform.position, transform.right * attackRange);
+            }
+        }
 
         private void Awake()
         {
@@ -170,6 +195,20 @@ namespace cngamejam
             {
                 State = States.ATTACK;
                 await PlayAnimation("attack");
+
+
+                //Attack 처리                
+                RaycastHit2D raycastHit = Physics2D.Raycast(transform.position,
+                    transform.right * ((Direction == Directions.Left) ? -1f : 1f),
+                    attackRange, 1 << LayerMask.NameToLayer("Enemy"));
+
+                if(raycastHit)
+                {
+                    
+                    Villain villain = raycastHit.collider.gameObject.GetComponent<Villain>();
+                    if (villain != null)
+                        villain.GetDemage();
+                }
             }
         }
 
