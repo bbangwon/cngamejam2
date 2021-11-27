@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UniRx;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 namespace cngamejam{
 
@@ -19,13 +21,25 @@ namespace cngamejam{
         Transform transformCatchedEnemy;
 
         [SerializeField]
-        TextMeshProUGUI textCatchedEnemy;
+        Text textCatchedEnemy;
 
         [SerializeField]
         GameObject heartPrefab;
 
         [SerializeField]
         GameObject cavePrefab;
+
+        [SerializeField]
+        GameObject result;
+
+        [SerializeField]
+        Text resultText;
+
+        [SerializeField]
+        Button retryButton;
+
+        [SerializeField]
+        Button titleButton;
 
         // Start is called before the first frame update
         void Start()
@@ -59,6 +73,19 @@ namespace cngamejam{
                 textCatchedEnemy.text = $"x{catchedEnemys}";
             });
 
+            Player.Instance.OnDie.AddListener(ShowResult);
+            retryButton.onClick.AddListener(() =>
+            {
+                Time.timeScale = 1f;
+                SceneManager.LoadScene(1);
+            });
+
+            titleButton.onClick.AddListener(() =>
+            {
+                Time.timeScale = 1f;
+                SceneManager.LoadScene(0);
+            });
+
         }
 
         async void PulseCatchedEnemy()
@@ -77,12 +104,15 @@ namespace cngamejam{
             Destroy(transformCaves.GetChild(transformCaves.childCount - 1).gameObject);
         }
 
-        private void Update()
+        void ShowResult()
         {
-            if(Input.GetKey(KeyCode.Alpha1))
-            {
-                PulseCatchedEnemy();
-            }
+            Time.timeScale = 0f;
+            result.SetActive(true);
+
+            resultText.text = $"당신은 총 {Player.Instance.CatchedEnemys.Value}마리의 악귀를\n지옥행 급행열차에 태웠습니다.";
+
+            retryButton.transform.DOScale(1.2f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
+            titleButton.transform.DOScale(1.2f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
         }
     }
 

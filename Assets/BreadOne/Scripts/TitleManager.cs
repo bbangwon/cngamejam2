@@ -23,6 +23,9 @@ public class TitleManager : MonoBehaviour
     [SerializeField]
     Image title;
 
+    [SerializeField]
+    Text pleaseAnyKey;
+
     bool interactable = false;
 
     private void Start()
@@ -40,6 +43,7 @@ public class TitleManager : MonoBehaviour
 
     async void ShowTitle2()
     {
+        pleaseAnyKey.DOFade(0f, 0f);
         player.transform.DOMoveY(-1100f, 0f);
         Enemy.transform.DOMoveY(-500f, 0f);
         title.transform.DOMoveX(-1600f, 0f);
@@ -55,6 +59,8 @@ public class TitleManager : MonoBehaviour
 
         light.DOFade(1f, 0.1f).SetDelay(0.5f);
 
+
+        pleaseAnyKey.DOFade(1f, 0.5f).SetLoops(-1, LoopType.Yoyo);
 
 
         interactable = true;

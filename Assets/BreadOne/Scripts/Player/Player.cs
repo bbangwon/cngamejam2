@@ -46,6 +46,8 @@ namespace cngamejam
         ReactiveProperty<int> catchedEnemys = new ReactiveProperty<int>();
         public ReadOnlyReactiveProperty<int> CatchedEnemys => catchedEnemys.ToReadOnlyReactiveProperty();
 
+        public UnityEvent OnDie = new UnityEvent();
+
         [SerializeField]
         GameObject cavePrefab;
 
@@ -268,6 +270,8 @@ namespace cngamejam
             {
                 State = States.DEAD;
                 await PlayAnimation("dead", false);
+
+                OnDie?.Invoke();
             }
          }
 
