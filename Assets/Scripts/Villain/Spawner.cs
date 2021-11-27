@@ -10,13 +10,13 @@ public class Spawner : MonoBehaviour
 
     public float spawnRange = 20f;
 
-    int killCount;
+    [SerializeField] int killCount;
     public int KillCount // 10마리당 스폰 1초씩 감소
     {
         get => killCount;
         set
         {
-            killCount += value;
+            killCount = value;
             CurSpawnCount--;
             MakeHard();
         }
@@ -27,7 +27,7 @@ public class Spawner : MonoBehaviour
     public int SpawnSeconds = 10; // 최소 1초
     public int VillainMaxHP = 1; // 50마리당 1씩 증가, 최대 5
 
-    public int Level = 1; // 레벨에 따른 빌런 타입 증가
+    //public int Level = 1; // 레벨에 따른 빌런 타입 증가
 
     float spawnWaitTime = 0;
 
@@ -60,9 +60,9 @@ public class Spawner : MonoBehaviour
 
     public void TestSpanwerSetting()
     {
-        MaxSpawnCount = 10;
+        MaxSpawnCount = 1;
         SpawnSeconds = 3;
-        VillainMaxHP = 1;
+        VillainMaxHP = 10;
     }
 
     void MakeHard()
@@ -80,7 +80,7 @@ public class Spawner : MonoBehaviour
         float spawn_x = Random.Range(-spawnRange + playerPos.x, spawnRange + playerPos.x);
 
         Villain.ESpawnType spawnType = (Villain.ESpawnType)Random.Range(0, 2);
-        float spawn_y = spawnType == Villain.ESpawnType.Downstairs ? -10f : 10f;
+        float spawn_y = spawnType == Villain.ESpawnType.Downstairs ? -7f : 7f;
 
         Vector2 spawnPos = new Vector2(spawn_x, spawn_y);
 
