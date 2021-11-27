@@ -21,6 +21,13 @@ namespace cngamejam
             if (currentHp.Value > 0)
                 currentHp.Value--;
         }
+
+        private void Update()
+        {
+            Vector3 cam_position = Camera.main.transform.position;
+            cam_position.x = transform.position.x;
+            Camera.main.transform.position = cam_position;
+        } 
     }
 
 }
