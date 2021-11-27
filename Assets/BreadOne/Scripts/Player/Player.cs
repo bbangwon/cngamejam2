@@ -4,6 +4,7 @@ using Spine.Unity;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using System;
+using UnityEngine.Events;
 
 namespace cngamejam
 {
@@ -28,11 +29,13 @@ namespace cngamejam
         [SerializeField]
         int maxCaveSkills;
 
-        ReactiveProperty<int> currentHp = new ReactiveProperty<int>();
-        public ReadOnlyReactiveProperty<int> CurrentHP => currentHp.ToReadOnlyReactiveProperty();
+        public UnityEvent<int> RemoveHP = new UnityEvent<int>();
+        int currentHp;
+        public int CurrentHp => currentHp;
 
-        ReactiveProperty<int> caveSkills = new ReactiveProperty<int>();
-        public ReadOnlyReactiveProperty<int> CaveSkills => caveSkills.ToReadOnlyReactiveProperty();
+        public UnityEvent<int> RemoveCaveSkill = new UnityEvent<int>();
+        int caveSkills;
+        public int CaveSkills => caveSkills;
 
         ReactiveProperty<int> catchedEnemys = new ReactiveProperty<int>();
         public ReadOnlyReactiveProperty<int> CatchedEnemys => catchedEnemys.ToReadOnlyReactiveProperty();
@@ -59,8 +62,8 @@ namespace cngamejam
 
         private void Awake()
         {
-            currentHp.Value = maxHp;
-            caveSkills.Value = maxCaveSkills;
+            currentHp = maxHp;
+            caveSkills = maxCaveSkills;
 
             characterController = GetComponent<CharacterController2D>();
             skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
@@ -75,10 +78,12 @@ namespace cngamejam
 
         public void Damage()
         {
-            if (currentHp.Value > 0)
-                currentHp.Value--;
+            if (currentHp > 0)
+                currentHp--;
 
-            if (currentHp.Value == 0)
+            RemoveHP.Invoke(currentHp);
+
+            if (currentHp == 0)
                 Dead().Forget();
         }
 
@@ -172,8 +177,11 @@ namespace cngamejam
         {
             if(State == States.IDLE || State == States.MOVE)
             {
-                if (caveSkills.Value > 0)
+                if (caveSkills > 0)
                 {
+                    caveSkills--;
+                    RemoveCaveSkill.Invoke(caveSkills);
+
                     Duck();
                     GameObject cave = Instantiate(cavePrefab);
                     cave.transform.position = new Vector3(caveSpawnX, 0f, 0f);
