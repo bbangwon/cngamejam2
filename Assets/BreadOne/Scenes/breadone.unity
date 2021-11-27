@@ -770,7 +770,7 @@ GameObject:
   - component: {fileID: 459187464}
   - component: {fileID: 459187466}
   - component: {fileID: 459187467}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1350,7 +1350,7 @@ GameObject:
   - component: {fileID: 1039360549}
   - component: {fileID: 1039360548}
   - component: {fileID: 1039360547}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}

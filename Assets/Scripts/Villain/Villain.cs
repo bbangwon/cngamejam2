@@ -258,12 +258,27 @@ public class Villain : MonoBehaviour
         return isTarget;
     }
 
+    private void OnGUI()
+    {
+        Vector2 moveDir = transform.position.x > player.transform.position.x ? Vector2.left : Vector2.right;
+        Debug.DrawRay(transform.position, moveDir * attackRange);
+    }
+
     bool IsPlayer()
     {
         Vector2 moveDir = transform.position.x > player.transform.position.x ? Vector2.left : Vector2.right;
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, moveDir, attackRange);
+        RaycastHit2D hits = Physics2D.Raycast(transform.position, moveDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
 
+        if(hits)
+        {
+            Debug.Log(hits.collider.name);
+            return true;
+        }
+
+        return false;
+
+        /*
         bool isTarget = false;
         for (int i = 0; i < hits.Length; i++)
         {
@@ -276,6 +291,7 @@ public class Villain : MonoBehaviour
 
         //if (isTarget) EditorDebug.LogError("player");
         return isTarget;
+        */
     }
 
     void Walk()
