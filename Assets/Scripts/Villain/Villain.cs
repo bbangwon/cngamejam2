@@ -34,7 +34,7 @@ public class Villain : MonoBehaviour
     [SerializeField] float MoveSpeed = 1f;
     [SerializeField] float rayDistance = 1f;
     [SerializeField] float attackRange = 2f;
-    [SerializeField] float attackDelay = 1f;
+    [SerializeField] [Range(1f, 10f)]float attackDelay = 1f;
     [SerializeField] float jumpPower = 5f;
     [SerializeField] Vector2 jumpVector = new Vector2(1f, 1f);
     [SerializeField] float pushPower = 0.7f;
@@ -75,6 +75,13 @@ public class Villain : MonoBehaviour
     {
         if (Player.Instance.State == Player.States.DEAD)
             return;
+
+
+        if (CheckOverPlayer() && action != EVillainAction.Spawn)
+        {
+            //Jump();
+            ReboundVillain();
+        }
 
         if (isJump)
         {
@@ -122,7 +129,7 @@ public class Villain : MonoBehaviour
         EditorDebug.LogFormat("[????] ChangeAction, {0} -> {1}", action, nextAction);
         action = nextAction;
 
-        switch(action)
+        switch (action)
         {
             case EVillainAction.Spawn:
                 if (spawnType == ESpawnType.Downstairs)
@@ -156,13 +163,13 @@ public class Villain : MonoBehaviour
         if (spawnType == ESpawnType.Downstairs)
         {
             transform.Translate(Vector2.up * Time.deltaTime * MoveSpeed);
-            if (transform.position.y > 1.4f)
+            if (transform.position.y > -.72f)
                 SpawnFinish();
         }
         else // Upstairs
         {
             transform.Translate(Vector2.down * Time.deltaTime * MoveSpeed);
-            if (transform.position.y < 1.6f)
+            if (transform.position.y < -0.72f)
                 SpawnFinish();
         }
 
@@ -173,6 +180,7 @@ public class Villain : MonoBehaviour
         ChangeAction(EVillainAction.Approach);
         coll.enabled = true;
         rb.gravityScale = 1f;
+
     }
 
     public void Approach()
@@ -181,7 +189,12 @@ public class Villain : MonoBehaviour
             return;
 
         if (IsPlayer())
+        {
+            attackDelay = Random.Range(1f, attackDelay);
+            isAttack = true;
+
             ChangeAction(EVillainAction.Attack);
+        }
 
         if (IsTrain())
         {
@@ -220,6 +233,7 @@ public class Villain : MonoBehaviour
             }
         }
 
+        attackDelay = Random.Range(1f, attackDelay);
         isAttack = true;
 
         if(attackType == EAttackType.Short)
@@ -312,7 +326,7 @@ public class Villain : MonoBehaviour
 
         RaycastHit2D hits = Physics2D.Raycast(transform.position, moveDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
 
-        if(hits)
+        if (hits)
         {
             Debug.Log(hits.collider.name);
             return true;
@@ -354,7 +368,7 @@ public class Villain : MonoBehaviour
     {
         EditorDebug.Log("[????] Jump");
         isJump = true;
-        Vector2 jumpDir = transform.position.x > Player.Instance.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
+        Vector2 jumpDir = transform.position.x > Player.Instance.transform.position.x ? jumpVector * new Vector2(-1f, 1f) : jumpVector;
         rb.AddForce(jumpDir * jumpPower, ForceMode2D.Impulse);
     }
 
@@ -363,6 +377,22 @@ public class Villain : MonoBehaviour
         Collider2D[] colls = Physics2D.OverlapCircleAll(coll.GetBottomPos(), 0.1f);
         if (colls.FirstOrDefault(coll => coll.CompareTag("UpFloor")))
             isJump = false;
+    }
+
+    /// <summary>
+    /// 플레이어 머리 위로 올라갔을 때 체크
+    /// </summary>
+    bool CheckOverPlayer()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(new Vector3(coll.bounds.center.x, coll.bounds.min.y, 0), Vector2.down, 0.1f, 1 << LayerMask.NameToLayer("Player"));
+        return hit.collider != null;
+    }
+
+    void ReboundVillain()
+    {
+        isJump = true;
+        Vector2 jumpDir = transform.position.x > Player.Instance.transform.position.x ? jumpVector * new Vector2(-1f, 0f) : jumpVector;
+        rb.AddForce(jumpDir * jumpPower, ForceMode2D.Impulse);
     }
 
     void OnDrawGizmosSelected()
@@ -378,6 +408,11 @@ public class Villain : MonoBehaviour
             Gizmos.DrawLine(transform.position + moveDir * rayDistance, transform.position + moveDir * rayDistance - new Vector3(0, coll.bounds.extents.y, 0));
             //Gizmos.DrawLine(transform.position, transform.position + ray_offset + moveDir * rayDistance);
             //Gizmos.DrawLine(coll.GetBottomPos(), coll.GetBottomPos() + moveDir * rayDistance);
+
+            Gizmos.color = Color.green;
+            //Gizmos.DrawRay(coll.bounds.center, Vector2.down);
+            //Gizmos.DrawRay(coll.bounds.min, Vector2.down);
+            //Gizmos.DrawRay(new Vector3(coll.bounds.center.x, coll.bounds.min.y, 0), Vector2.down);
         }
 
         Gizmos.color = Color.red;

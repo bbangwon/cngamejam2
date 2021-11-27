@@ -46,13 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c8912dc963ded4aa0b1d7cf0e42fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 6
-  rayDistance: 1
-  attackRange: 12
-  attackDelay: 1
-  jumpPower: 10
+  MoveSpeed: 4
+  rayDistance: 0.6
+  attackRange: 7
+  attackDelay: 3
+  jumpPower: 8
   jumpVector: {x: 1, y: 2}
-  pushPower: 0.7
+  pushPower: 0.6
   attackType: 1
   spawnType: 0
   action: 0
