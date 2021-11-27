@@ -230,7 +230,8 @@ namespace cngamejam
                         bool isDead = villain.GetDemage();
                         if(isDead)
                         {
-                            catchedEnemys.Value++;
+                            //catchedEnemys.Value++;
+                            catchedEnemys.Value = Spawner.Instance.KillCount;
                         }
                     }
                         
@@ -273,7 +274,8 @@ namespace cngamejam
                     if (cave != null)
                         Destroy(cave);
 
-                    catchedEnemys.Value += Spawner.Instance.CurSpawnCount;
+                    catchedEnemys.Value = Spawner.Instance.KillCount;
+                    //catchedEnemys.Value += Spawner.Instance.CurSpawnCount;
                     Idle();
                 }
             }
