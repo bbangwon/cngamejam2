@@ -52,7 +52,9 @@ namespace cngamejam{
         public async UniTask SpawnSkillEffect()
         {
             GameObject spawnEffect = Instantiate(skillEffectPrefab, transform);
-            spawnEffect.transform.position = Vector3.zero;
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f));
+
+            spawnEffect.transform.position = new Vector3(worldPos.x, worldPos.y, 0f);
             await UniTask.Delay(500);
             Destroy(spawnEffect);
         }

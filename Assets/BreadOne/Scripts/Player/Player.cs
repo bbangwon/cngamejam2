@@ -326,6 +326,7 @@ namespace cngamejam
             if(collision.tag == "DeadZone")
             {
                 characterController.Interactable = false;
+                Dead().Forget();
             }
         }
 
