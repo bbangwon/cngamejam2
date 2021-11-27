@@ -36,8 +36,7 @@ namespace cngamejam{
 
             if(bgmClip != null)
             {
-                GameObject bgmObject = new GameObject("BGM");
-                bgmSource = bgmObject.AddComponent<AudioSource>();
+                bgmSource = GetComponent<AudioSource>();
 
                 bgmSource.clip = bgmClip;
                 bgmSource.loop = true;
@@ -50,14 +49,8 @@ namespace cngamejam{
             if(bgmSource != null)
             {
                 bgmSource.Stop();
-                Destroy(bgmSource.gameObject);
             }
 
-        }
-
-        private void OnDestroy()
-        {
-            StopBGM();
         }
     }
 }

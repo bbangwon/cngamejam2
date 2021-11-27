@@ -36,11 +36,10 @@ namespace cngamejam{
 
         bool interactable = false;
 
-        CancellationTokenSource cts = new CancellationTokenSource();
 
         private void Start()
         {
-            ShowTitle2().AttachExternalCancellation(cts.Token);
+            ShowTitle2().Forget();
         }
 
         async void ShowTitle()
@@ -55,6 +54,8 @@ namespace cngamejam{
         {
             try
             {
+                
+
                 pleaseAnyKey.DOFade(0f, 0f);
                 player.transform.DOMoveY(-1100f, 0f);
                 Enemy.transform.DOMoveY(-500f, 0f);
@@ -72,7 +73,7 @@ namespace cngamejam{
 
                 await title_1.transform.DOMoveX(960f - 310f, 1f).AsyncWaitForCompletion();
 
-                SwitchTitle().AttachExternalCancellation(cts.Token).Forget();
+                SwitchTitle().Forget();
 
                 light.DOFade(1f, 0.1f).SetDelay(0.5f);
 
@@ -81,14 +82,9 @@ namespace cngamejam{
 
 
                 interactable = true;
-            } catch(OperationCanceledException e)
+            } catch(Exception e)
             {
-                if (e.CancellationToken == cts.Token)
-                {
-                    SoundManager.Instance.StopBGM();
-                    return;
-                }
-                    
+                return;
             }
         }
 
@@ -105,14 +101,9 @@ namespace cngamejam{
                     await UniTask.Delay(5000);
                     await title_2.transform.DOScaleY(0f, 0.25f).AsyncWaitForCompletion();
                     await title_1.transform.DOScaleY(1f, 0.25f).AsyncWaitForCompletion();
-                }catch(OperationCanceledException e)
+                }catch(Exception e)
                 {
-                    Debug.Log("Cancel");
-                    if (e.CancellationToken == cts.Token)
-                    {
-                        return;
-                    }
-                        
+                    return;
                 }
             }
         }
@@ -137,8 +128,7 @@ namespace cngamejam{
 
         private void OnDestroy()
         {
-            cts.Cancel();
-            DOTween.Clear();
+            DOTween.KillAll();
         }
     }
 }

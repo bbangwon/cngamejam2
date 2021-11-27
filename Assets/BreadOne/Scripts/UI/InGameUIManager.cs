@@ -78,13 +78,13 @@ namespace cngamejam{
             Player.Instance.OnDie.AddListener(ShowResult);
             retryButton.onClick.AddListener(() =>
             {
-                Time.timeScale = 1f;
+                DOTween.KillAll();
                 SceneManager.LoadScene(1);
             });
 
             titleButton.onClick.AddListener(() =>
             {
-                Time.timeScale = 1f;
+                DOTween.KillAll();
                 SceneManager.LoadScene(0);
             });
 
