@@ -21,6 +21,8 @@ namespace cngamejam{
         private Rigidbody2D rigidbody2D;
         private Collider2D collider2D;
 
+        public bool Interactable = true;
+
         private void Awake()
         {
             rigidbody2D = GetComponent<Rigidbody2D>();
@@ -48,6 +50,9 @@ namespace cngamejam{
 
         private void FixedUpdate()
         {
+            if (!Interactable)
+                return;
+
             CheckGround();
 
             rigidbody2D.velocity = new Vector2(moveVector * maxSpeed, rigidbody2D.velocity.y);
