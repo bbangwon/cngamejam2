@@ -84,12 +84,12 @@ public class Villain : MonoBehaviour
     {
         rb ??= GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
-        Debug.LogError("gravity 0");
 
         coll ??= GetComponent<Collider2D>();
         coll.enabled = false;
 
         HP = Spawner.VillainMaxHP;
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         isJump = false;
         ChangeAction(EVillainAction.Spawn);
@@ -123,7 +123,6 @@ public class Villain : MonoBehaviour
         ChangeAction(EVillainAction.Approach);
         coll.enabled = true;
         rb.gravityScale = 1f;
-        Debug.LogError("gravity 1,  " + transform.position.y);
     }
 
     public void Approach()
@@ -163,6 +162,7 @@ public class Villain : MonoBehaviour
     void Dead()
     {
         ChangeAction(EVillainAction.Dead);
+        gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         //Destroy(gameObject, 1f); // 임시로 1초 // dead 시간 동안 대기
     }
 
