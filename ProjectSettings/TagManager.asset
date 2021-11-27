@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - DeadZone
+  - UpFloor
   layers:
   - Default
   - TransparentFX
@@ -14,8 +15,8 @@ TagManager:
   - UI
   - UpFloor
   - DownFloor
-  - 
-  - 
+  - Enemy
+  - DeadEnemy
   - 
   - 
   - 
