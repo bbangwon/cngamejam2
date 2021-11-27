@@ -84,7 +84,11 @@ namespace cngamejam{
             } catch(OperationCanceledException e)
             {
                 if (e.CancellationToken == cts.Token)
+                {
+                    SoundManager.Instance.StopBGM();
                     return;
+                }
+                    
             }
         }
 

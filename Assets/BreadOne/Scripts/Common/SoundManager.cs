@@ -47,7 +47,17 @@ namespace cngamejam{
 
         public void StopBGM()
         {
-            bgmSource.Stop();
+            if(bgmSource != null)
+            {
+                bgmSource.Stop();
+                Destroy(bgmSource.gameObject);
+            }
+
+        }
+
+        private void OnDestroy()
+        {
+            StopBGM();
         }
     }
 }
