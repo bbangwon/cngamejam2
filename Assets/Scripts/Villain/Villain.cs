@@ -220,7 +220,7 @@ public class Villain : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
         if (hit.collider != null)
         {
-            //hit.collider.GetComponent<Player>().Damage();
+            hit.collider.GetComponent<Player>().Damage();
 
             if (attackType == EAttackType.Long)
             {
