@@ -25,9 +25,27 @@ namespace cngamejam
         [SerializeField]
         int maxHp;
 
-        ReactiveProperty<int> currentHp = new ReactiveProperty<int>();
-        ReadOnlyReactiveProperty<int> CurrentHP => currentHp.ToReadOnlyReactiveProperty();
+        [SerializeField]
+        int maxCaveSkills;
 
+        ReactiveProperty<int> currentHp = new ReactiveProperty<int>();
+        public ReadOnlyReactiveProperty<int> CurrentHP => currentHp.ToReadOnlyReactiveProperty();
+
+        ReactiveProperty<int> caveSkills = new ReactiveProperty<int>();
+        public ReadOnlyReactiveProperty<int> CaveSkills => caveSkills.ToReadOnlyReactiveProperty();
+
+        ReactiveProperty<int> catchedEnemys = new ReactiveProperty<int>();
+        public ReadOnlyReactiveProperty<int> CatchedEnemys => catchedEnemys.ToReadOnlyReactiveProperty();
+
+        [SerializeField]
+        GameObject cavePrefab;
+
+        [SerializeField]
+        float caveSpawnX;
+
+        [SerializeField]
+        float caveDespawnX;
+ 
         CharacterController2D characterController;
 
         SkeletonAnimation skeletonAnimation;
@@ -42,6 +60,7 @@ namespace cngamejam
         private void Awake()
         {
             currentHp.Value = maxHp;
+            caveSkills.Value = maxCaveSkills;
 
             characterController = GetComponent<CharacterController2D>();
             skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
@@ -77,7 +96,7 @@ namespace cngamejam
 
                 if(Input.GetButtonDown("Fire2"))
                 {
-                    Duck();
+                    SpawnCave().Forget();
                 }
             }
 
@@ -147,6 +166,33 @@ namespace cngamejam
                 State = States.ATTACK;
                 await PlayAnimation("attack");
             }
+        }
+
+        async UniTask SpawnCave()
+        {
+            if(State == States.IDLE || State == States.MOVE)
+            {
+                if (caveSkills.Value > 0)
+                {
+                    Duck();
+                    GameObject cave = Instantiate(cavePrefab);
+                    cave.transform.position = new Vector3(caveSpawnX, 0f, 0f);
+
+                    await UniTask.WaitUntil(() => {
+                        if(cave != null)
+                        {
+                            return cave.transform.position.x <= caveDespawnX;
+                        }
+                        return true;
+
+                    });
+                    if (cave != null)
+                        Destroy(cave);
+
+                    Idle();
+                }
+            }
+
         }
 
         async UniTask Hit()

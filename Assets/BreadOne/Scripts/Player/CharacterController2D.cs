@@ -42,6 +42,8 @@ namespace cngamejam{
 
             if (colliders.Count(c => c != collider2D) > 0)
                 isGrounded = true;
+
+            Debug.Log(isGrounded);
         }
 
         private void FixedUpdate()
@@ -50,6 +52,8 @@ namespace cngamejam{
                 return;
 
             CheckGround();
+
+            
 
             if(Input.GetButton("Jump") && isGrounded)
             {
