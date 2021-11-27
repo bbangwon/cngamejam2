@@ -14,11 +14,14 @@ namespace cngamejam
 
         CharacterController2D characterController;
 
+        SpriteRenderer spriteRenderer;
+
         private void Awake()
         {
             currentHp.Value = maxHp;
 
             characterController = GetComponent<CharacterController2D>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         public void Damage()
@@ -33,8 +36,11 @@ namespace cngamejam
             cam_position.x = transform.position.x;
             Camera.main.transform.position = cam_position;
 
+            //flip..
+            spriteRenderer.flipX = characterController.MoveDirection >= 0f;
+
             //Dead Zone...
-            if(transform.position.y < -8f)
+            if (transform.position.y < -8f)
             {
                 Dead();
             }

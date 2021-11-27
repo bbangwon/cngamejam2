@@ -7,7 +7,6 @@ namespace cngamejam{
 
     public class CharacterController2D : MonoBehaviour
     {
-
         [SerializeField]
         float maxSpeed = 3.4f;
 
@@ -23,16 +22,12 @@ namespace cngamejam{
 
         public bool Interactable = true;
 
+        public float MoveDirection { get; private set; }
+
         private void Awake()
         {
             rigidbody2D = GetComponent<Rigidbody2D>();
             collider2D = GetComponent<Collider2D>();
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
         }
 
         void CheckGround()
@@ -67,6 +62,16 @@ namespace cngamejam{
         void Update()
         {
             moveVector = Input.GetAxis("Horizontal");
+
+            if(moveVector < 0f)
+            {
+                MoveDirection = -1;
+            }
+            else if(moveVector > 0f)
+            {
+                MoveDirection = 1f;
+            }
+
         }
     }
 
