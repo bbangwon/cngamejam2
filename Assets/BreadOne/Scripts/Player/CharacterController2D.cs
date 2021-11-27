@@ -14,6 +14,7 @@ namespace cngamejam{
         float jumpHeight = 6.5f;
 
         float moveVector;
+        public float MoveValuePerFrame => moveVector * maxSpeed * Time.deltaTime;
 
         bool isGrounded = false;
 
@@ -49,8 +50,6 @@ namespace cngamejam{
                 return;
 
             CheckGround();
-
-            rigidbody2D.velocity = new Vector2(moveVector * maxSpeed, rigidbody2D.velocity.y);
 
             if(Input.GetButton("Jump") && isGrounded)
             {

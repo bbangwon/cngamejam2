@@ -16,6 +16,8 @@ namespace cngamejam
 
         SpriteRenderer spriteRenderer;
 
+        public float MoveValuePerFrame => characterController.MoveValuePerFrame;
+
         private void Awake()
         {
             currentHp.Value = maxHp;

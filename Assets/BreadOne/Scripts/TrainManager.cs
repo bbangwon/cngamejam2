@@ -38,12 +38,14 @@ namespace cngamejam
 
             CreateTrain(currentPlayerIndex);
 
+            transform.Translate(-playerRef.MoveValuePerFrame, 0f, 0f); 
+            
         }
 
         int GetPlayerTrainIndex()
         {
-            float playerX = playerRef.transform.position.x / spacingX;
-            int index = Mathf.RoundToInt(playerX);
+            float X = -transform.position.x / spacingX;
+            int index = Mathf.RoundToInt(X);
 
             return index;
         }

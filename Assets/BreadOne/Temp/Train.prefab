@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5572389837492769469}
   - component: {fileID: 5572389837492769471}
   - component: {fileID: 5572389837492769468}
+  - component: {fileID: 7402549987730112863}
   m_Layer: 0
   m_Name: Train
   m_TagString: Untagged
@@ -109,3 +110,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7402549987730112863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5572389837492769442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a9b8d751706c41d5af24fb7527bfc5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength: 0.1
+  vibrato: 5
