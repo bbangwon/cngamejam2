@@ -37,7 +37,7 @@ public class Villain : MonoBehaviour
     [SerializeField] float attackDelay = 1f;
     [SerializeField] float jumpPower = 5f;
     [SerializeField] Vector2 jumpVector = new Vector2(1f, 1f);
-     
+    [SerializeField] float pushPower = 0.7f;
     #endregion Inspector Setting
 
     [Header("Data")]
@@ -57,15 +57,9 @@ public class Villain : MonoBehaviour
     [SerializeField] bool isJump = false;
 
     [SerializeField] bool isAttack = false;
-    
-    [SerializeField]
-    GameObject player; // ???? ???? ??, ???? ???????? ????.
 
-    private void Awake()
-    {
-        player ??= GameObject.Find("Player");
-        //Init();
-    }
+    [SerializeField] GameObject bulletPrefab;
+    [SerializeField] Transform ShotPos;
 
     void Update()
     {
@@ -79,6 +73,9 @@ public class Villain : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (Player.Instance.State == Player.States.DEAD)
+            return;
+
         if (isJump)
         {
             CheckGround();
@@ -120,14 +117,9 @@ public class Villain : MonoBehaviour
         ChangeAction(EVillainAction.Spawn);
     }
 
-    public void SetPlayer(GameObject player)
-    {
-        this.player = player;
-    }
-
     public void ChangeAction(EVillainAction nextAction)
     {
-        EditorDebug.LogFormat("[????] ChangeAction, {0} -> {1}", action, nextAction);
+        EditorDebug.LogFormat("[ºô·±] ChangeAction, {0} -> {1}", action, nextAction);
         action = nextAction;
 
         switch(action)
@@ -164,13 +156,13 @@ public class Villain : MonoBehaviour
         if (spawnType == ESpawnType.Downstairs)
         {
             transform.Translate(Vector2.up * Time.deltaTime * MoveSpeed);
-            if (transform.position.y > 1.4f) // ?????? ????????
+            if (transform.position.y > 1.4f)
                 SpawnFinish();
         }
         else // Upstairs
         {
             transform.Translate(Vector2.down * Time.deltaTime * MoveSpeed);
-            if (transform.position.y < 1.6f) // ?????? ????????
+            if (transform.position.y < 1.6f)
                 SpawnFinish();
         }
 
@@ -185,7 +177,7 @@ public class Villain : MonoBehaviour
 
     public void Approach()
     {
-        if (player == null)
+        if (Player.Instance == null)
             return;
 
         if (IsPlayer())
@@ -206,11 +198,27 @@ public class Villain : MonoBehaviour
         if (IsPlayer() == false)
             ChangeAction(EVillainAction.Approach);
 
-        Vector3 attackDir = transform.position.x > player.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 attackDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
         if (attackDir == Vector3.right)
             spineAnim.transform.localScale = new Vector3(-1f, 1f);
         else
             spineAnim.transform.localScale = new Vector3(1f, 1f);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
+        if (hit.collider != null)
+        {
+            hit.collider.GetComponent<Player>().Damage();
+
+            if (attackType == EAttackType.Long)
+            {
+                if (bulletPrefab == null)
+                    EditorDebug.LogError("Cannot Find Bullet Prefab");
+
+                bullet bullet = Instantiate(bulletPrefab).GetComponent<bullet>();
+                bullet.SetStartPosition(ShotPos.position);
+                bullet.Shot(attackRange * attackDir.x);
+            }
+        }
 
         isAttack = true;
         ChangeSpineAnim("attack", false);
@@ -230,20 +238,37 @@ public class Villain : MonoBehaviour
         else
         {
             ChangeSpineAnim("hit", false);
+
+            float pushValue = transform.position.x > Player.Instance.transform.position.x ? pushPower : -pushPower;
+            transform.DOLocalMoveX(transform.localPosition.x + pushValue, 0.1f).SetLoops(2, LoopType.Yoyo);
         }
         return false;
     }
 
     void Dead()
     {
+        if (action == EVillainAction.Dead)
+            return;
+
         ChangeAction(EVillainAction.Dead);
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
-        //Destroy(gameObject, 1f); // ?????? 1?? // dead ???? ???? ????
+
+        float pushValue = transform.position.x > Player.Instance.transform.position.x ? pushPower : -pushPower;
+        rb.freezeRotation = false;
+        rb.AddTorque(pushValue * 2f, ForceMode2D.Impulse);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name.Contains("cave"))
+        {
+            Dead();
+        }
     }
 
     bool IsTrain()
     {
-        Vector3 moveDir = transform.position.x > player.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
 
         Ray2D ray = new Ray2D(transform.position + moveDir * rayDistance, Vector2.down);
         RaycastHit2D[] hits = Physics2D.RaycastAll(ray.origin, ray.direction);
@@ -265,13 +290,13 @@ public class Villain : MonoBehaviour
 
     private void OnGUI()
     {
-        Vector2 moveDir = transform.position.x > player.transform.position.x ? Vector2.left : Vector2.right;
+        Vector2 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector2.left : Vector2.right;
         Debug.DrawRay(transform.position, moveDir * attackRange);
     }
 
     bool IsPlayer()
     {
-        Vector2 moveDir = transform.position.x > player.transform.position.x ? Vector2.left : Vector2.right;
+        Vector2 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector2.left : Vector2.right;
 
         RaycastHit2D hits = Physics2D.Raycast(transform.position, moveDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
 
@@ -301,7 +326,7 @@ public class Villain : MonoBehaviour
 
     void Walk()
     {
-        Vector3 moveDir = transform.position.x > player.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
 
         if (moveDir == Vector3.right)
             spineAnim.transform.localScale = new Vector3(-1f, 1f);
@@ -310,14 +335,14 @@ public class Villain : MonoBehaviour
 
         //rb.MovePosition(transform.position + moveDir * MoveSpeed * Time.deltaTime);
         transform.Translate(moveDir * MoveSpeed * Time.deltaTime);
-        EditorDebug.Log("[????] Walk");
+        EditorDebug.Log("[ºô·±] Walk");
     }
 
     void Jump()
     {
-        EditorDebug.Log("[????] Jump");
+        EditorDebug.Log("[ºô·±] Jump");
         isJump = true;
-        Vector2 jumpDir = transform.position.x > player.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
+        Vector2 jumpDir = transform.position.x > Player.Instance.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
         rb.AddForce(jumpDir * jumpPower, ForceMode2D.Impulse);
     }
 
@@ -330,10 +355,10 @@ public class Villain : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (player == null)
+        if (Player.Instance == null)
             return;
 
-        Vector3 moveDir = transform.position.x > player.transform.position.x ? Vector3.left : Vector3.right;
+        Vector3 moveDir = transform.position.x > Player.Instance.transform.position.x ? Vector3.left : Vector3.right;
 
         if (coll != null)
         {

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1633955462767129122}
   - component: {fileID: 1633955462767129127}
   - component: {fileID: 1633955462767129123}
-  - component: {fileID: 8169980550913646533}
+  - component: {fileID: 6535699311501074763}
   m_Layer: 8
   m_Name: Villain
   m_TagString: Untagged
@@ -52,6 +52,7 @@ MonoBehaviour:
   attackDelay: 1
   jumpPower: 10
   jumpVector: {x: 1, y: 2}
+  pushPower: 0.7
   attackType: 0
   spawnType: 0
   action: 0
@@ -59,7 +60,6 @@ MonoBehaviour:
   Power: 1
   isJump: 0
   isAttack: 0
-  player: {fileID: 0}
 --- !u!50 &1633955462767129123
 Rigidbody2D:
   serializedVersion: 4
@@ -81,7 +81,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &8169980550913646533
+--- !u!61 &6535699311501074763
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
