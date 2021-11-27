@@ -207,7 +207,14 @@ namespace cngamejam
                     
                     Villain villain = raycastHit.collider.gameObject.GetComponent<Villain>();
                     if (villain != null)
-                        villain.GetDemage();
+                    {
+                        bool isDead = villain.GetDemage();
+                        if(isDead)
+                        {
+                            catchedEnemys.Value++;
+                        }
+                    }
+                        
                 }
             }
         }

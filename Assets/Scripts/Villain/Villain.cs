@@ -214,7 +214,7 @@ public class Villain : MonoBehaviour
         ChangeSpineAnim("attack", false);
     }
 
-    public void GetDemage()
+    public bool GetDemage()
     {
         Debug.Log("GetDamage");
         HP--;
@@ -222,11 +222,13 @@ public class Villain : MonoBehaviour
         if (HP <= 0)
         {
             Dead();
+            return true;
         }
         else
         {
             ChangeSpineAnim("hit", false);
         }
+        return false;
     }
 
     void Dead()
