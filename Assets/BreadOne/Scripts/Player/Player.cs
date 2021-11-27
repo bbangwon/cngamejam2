@@ -104,9 +104,13 @@ namespace cngamejam
         public void Damage()
         {
             if (currentHp > 0)
+            {
                 currentHp--;
+                RemoveHP.Invoke(currentHp);
+                
+            }
 
-            RemoveHP.Invoke(currentHp);
+            EffectManager.Instance.SpawnAttackEffect(transform.position).Forget();
 
             if (currentHp == 0)
                 Dead().Forget();

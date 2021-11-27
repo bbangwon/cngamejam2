@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Linq;
 using DG.Tweening;
 using Spine.Unity;
+using cngamejam;
+using Cysharp.Threading.Tasks;
 
 public class Villain : MonoBehaviour
 {
@@ -218,6 +220,7 @@ public class Villain : MonoBehaviour
     {
         Debug.Log("GetDamage");
         HP--;
+        EffectManager.Instance.SpawnAttackEffect(transform.position).Forget();
 
         if (HP <= 0)
         {
