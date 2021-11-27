@@ -249,6 +249,7 @@ namespace cngamejam
                     if (cave != null)
                         Destroy(cave);
 
+                    catchedEnemys.Value += Spawner.Instance.CurSpawnCount;
                     Idle();
                 }
             }

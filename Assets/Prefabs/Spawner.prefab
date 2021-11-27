@@ -43,14 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d72024ceb89aece47b5a337005d69707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRange: 30
+  spawnRange: 40
   MaxSpawnCount: 1
   CurSpawnCount: 0
   SpawnSeconds: 10
   VillainMaxHP: 1
   Level: 1
   TrainParent: {fileID: 0}
-  Player: {fileID: 0}
   SpawnPrefabs:
   - {fileID: 1633955462767129126, guid: 118c90e349dfee047a9b289720ea197e, type: 3}
   - {fileID: 1633955462767129126, guid: 58b1cfbf2934e71458eff728c3f40895, type: 3}

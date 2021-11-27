@@ -226,7 +226,6 @@ public class Villain : MonoBehaviour
 
     public bool GetDemage()
     {
-        Debug.Log("GetDamage");
         HP--;
         EffectManager.Instance.SpawnAttackEffect(transform.position).Forget();
 
@@ -252,6 +251,8 @@ public class Villain : MonoBehaviour
 
         ChangeAction(EVillainAction.Dead);
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
+
+        Spawner.Instance.KillCount += 1;
 
         float pushValue = transform.position.x > Player.Instance.transform.position.x ? pushPower : -pushPower;
         rb.freezeRotation = false;
