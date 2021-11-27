@@ -62,6 +62,7 @@ public class Spawner : MonoBehaviour
     {
         MaxSpawnCount = 10;
         SpawnSeconds = 1;
+        VillainMaxHP = 1;
     }
 
     void MakeHard()
