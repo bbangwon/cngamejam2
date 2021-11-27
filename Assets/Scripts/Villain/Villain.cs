@@ -88,7 +88,7 @@ public class Villain : MonoBehaviour
         coll ??= GetComponent<Collider2D>();
         coll.enabled = false;
 
-        HP = Spawner.Instance.VillainMaxHP;
+        HP = 1;//Spawner.Instance.VillainMaxHP;
         gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         isJump = false;
