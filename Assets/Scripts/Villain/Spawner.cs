@@ -76,14 +76,14 @@ public class Spawner : MonoBehaviour
         if (CurSpawnCount >= MaxSpawnCount)
             return null;
 
-        int index = Random.Range(0, Level);
-
         float spawn_x = Random.Range(-spawnRange + playerPos.x, spawnRange + playerPos.x);
 
         Villain.ESpawnType spawnType = (Villain.ESpawnType)Random.Range(0, 2);
         float spawn_y = spawnType == Villain.ESpawnType.Downstairs ? -10f : 10f;
 
         Vector2 spawnPos = new Vector2(spawn_x, spawn_y);
+
+        int index = Random.Range(0, Level);
 
         Villain villain = null;
         if (TrainParent != null)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using DG.Tweening;
+using Spine.Unity;
 
 public class Villain : MonoBehaviour
 {
@@ -27,13 +28,17 @@ public class Villain : MonoBehaviour
     }
 
     #region Inspector Setting
+    [Header("Settings")]
     [SerializeField] float MoveSpeed = 1f;
     [SerializeField] float rayDistance = 1f;
     [SerializeField] float attackRange = 2f;
+    [SerializeField] float attackDelay = 1f;
     [SerializeField] float jumpPower = 5f;
+    [SerializeField] Vector2 jumpVector = new Vector2(1f, 1f);
      
     #endregion Inspector Setting
 
+    [Header("Data")]
     [SerializeField] EAttackType attackType;
     public ESpawnType spawnType;
     public EVillainAction action;
@@ -42,11 +47,14 @@ public class Villain : MonoBehaviour
     public int HP;
     public int Power = 1;
 
+    SkeletonAnimation spineAnim;
     Rigidbody2D rb;
     Collider2D coll;
+    float attackWaitTime = 0;
 
-    [SerializeField]
-    bool isJump = false;
+    [SerializeField] bool isJump = false;
+
+    [SerializeField] bool isAttack = false;
     
     [SerializeField]
     GameObject player; // ÀÓ½Ã ´õ¹Ì °ª, ÂüÁ¶ ¾ò¾î¿Í¾ß ÇÑ´Ù.
@@ -55,6 +63,16 @@ public class Villain : MonoBehaviour
     {
         player ??= GameObject.Find("Player");
         //Init();
+    }
+
+    void Update()
+    {
+        attackWaitTime += Time.deltaTime;
+        if (attackWaitTime >= attackDelay)
+        {
+            attackWaitTime = 0;
+            isAttack = false;
+        }
     }
 
     void FixedUpdate()
@@ -73,7 +91,7 @@ public class Villain : MonoBehaviour
             {
                 Approach();
             }
-            else if (action == EVillainAction.Attack)
+            else if (action == EVillainAction.Attack && isAttack == false)
             {
                 Attack();
             }
@@ -88,10 +106,15 @@ public class Villain : MonoBehaviour
         coll ??= GetComponent<Collider2D>();
         coll.enabled = false;
 
+        spineAnim ??= GetComponentInChildren<SkeletonAnimation>();
+
         HP = Spawner.Instance.VillainMaxHP;
         gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         isJump = false;
+        jumpVector = jumpVector.normalized;
+        attackWaitTime = 0;
+
         ChangeAction(EVillainAction.Spawn);
     }
 
@@ -104,6 +127,34 @@ public class Villain : MonoBehaviour
     {
         EditorDebug.LogFormat("[ºô·±] ChangeAction, {0} -> {1}", action, nextAction);
         action = nextAction;
+
+        switch(action)
+        {
+            case EVillainAction.Spawn:
+                if (spawnType == ESpawnType.Downstairs)
+                    ChangeSpineAnim("spawn_under", true);
+                else
+                    ChangeSpineAnim("move", true);
+                break;
+
+            case EVillainAction.Approach:
+                ChangeSpineAnim("move", true);
+                break;
+
+            //case EVillainAction.Attack:
+            //    ChangeSpineAnim("attack", false);
+            //    break;
+
+            case EVillainAction.Dead:
+                ChangeSpineAnim("dead", false);
+                break;
+
+        }
+    }
+
+    void ChangeSpineAnim(string animationName, bool loop)
+    {
+        spineAnim.state.SetAnimation(0, animationName, loop);
     }
 
     public void Spawn()
@@ -153,7 +204,14 @@ public class Villain : MonoBehaviour
         if (IsPlayer() == false)
             ChangeAction(EVillainAction.Approach);
 
+        Vector3 attackDir = transform.position.x > player.transform.position.x ? Vector3.left : Vector3.right;
+        if (attackDir == Vector3.right)
+            spineAnim.transform.localScale = new Vector3(-1f, 1f);
+        else
+            spineAnim.transform.localScale = new Vector3(1f, 1f);
 
+        isAttack = true;
+        ChangeSpineAnim("attack", false);
     }
 
     public void GetDemage()
@@ -161,7 +219,13 @@ public class Villain : MonoBehaviour
         HP--;
 
         if (HP <= 0)
+        {
             Dead();
+        }
+        else
+        {
+            ChangeSpineAnim("hit", false);
+        }
     }
 
     void Dead()
@@ -217,6 +281,11 @@ public class Villain : MonoBehaviour
     {
         Vector3 moveDir = transform.position.x > player.transform.position.x ? Vector3.left : Vector3.right;
 
+        if (moveDir == Vector3.right)
+            spineAnim.transform.localScale = new Vector3(-1f, 1f);
+        else
+            spineAnim.transform.localScale = new Vector3(1f, 1f);
+
         //rb.MovePosition(transform.position + moveDir * MoveSpeed * Time.deltaTime);
         transform.Translate(moveDir * MoveSpeed * Time.deltaTime);
         EditorDebug.Log("[ºô·±] Walk");
@@ -226,7 +295,7 @@ public class Villain : MonoBehaviour
     {
         EditorDebug.Log("[ºô·±] Jump");
         isJump = true;
-        Vector2 jumpDir = transform.position.x > player.transform.position.x ? new Vector2(-1, 1) : new Vector2(1, 1);
+        Vector2 jumpDir = transform.position.x > player.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
         rb.AddForce(jumpDir * jumpPower, ForceMode2D.Impulse);
     }
 

@@ -696,8 +696,16 @@ PrefabInstance:
       value: Spawner
       objectReference: {fileID: 0}
     - target: {fileID: 2687091217041088935, guid: d9291b8d3b29c1c4a8189f5c656fe751, type: 3}
+      propertyPath: Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2687091217041088935, guid: d9291b8d3b29c1c4a8189f5c656fe751, type: 3}
       propertyPath: Player
       value: 
       objectReference: {fileID: 2089867665}
+    - target: {fileID: 2687091217041088935, guid: d9291b8d3b29c1c4a8189f5c656fe751, type: 3}
+      propertyPath: TestMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9291b8d3b29c1c4a8189f5c656fe751, type: 3}
