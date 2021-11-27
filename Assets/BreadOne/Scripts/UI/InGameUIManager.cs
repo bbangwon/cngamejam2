@@ -44,6 +44,8 @@ namespace cngamejam{
         // Start is called before the first frame update
         void Start()
         {
+            SoundManager.Instance.PlayBGM("01_ingame");
+
             Player.Instance.RemoveHP.AddListener(RemoveHP);
             Player.Instance.RemoveCaveSkill.AddListener(RemoveCaveSkill);
 
@@ -90,8 +92,8 @@ namespace cngamejam{
 
         async void PulseCatchedEnemy()
         {
-            await transformCatchedEnemy.transform.DOScale(1.2f, 0.15f).AsyncWaitForCompletion();
-            await transformCatchedEnemy.transform.DOScale(1f, 0.1f).AsyncWaitForCompletion();
+            await transformCatchedEnemy?.transform?.DOScale(1.2f, 0.15f).AsyncWaitForCompletion();
+            await transformCatchedEnemy?.transform?.DOScale(1f, 0.1f).AsyncWaitForCompletion();
         }
 
         void RemoveHP(int hp)
@@ -106,13 +108,12 @@ namespace cngamejam{
 
         void ShowResult()
         {
-            Time.timeScale = 0f;
             result.SetActive(true);
 
             resultText.text = $"당신은 총 {Player.Instance.CatchedEnemys.Value}마리의 악귀를\n지옥행 급행열차에 태웠습니다.";
 
-            retryButton.transform.DOScale(1.2f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
-            titleButton.transform.DOScale(1.2f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
+            retryButton.transform.DOScale(1.2f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+            titleButton.transform.DOScale(1.2f, 0.5f).SetLoops(-1, LoopType.Yoyo);
         }
     }
 

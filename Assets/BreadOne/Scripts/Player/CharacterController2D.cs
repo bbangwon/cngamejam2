@@ -62,6 +62,9 @@ namespace cngamejam{
         // Update is called once per frame
         void Update()
         {
+            if (!Interactable)
+                return;
+
             moveVector = Input.GetAxis("Horizontal");
 
             if(moveVector < 0f)

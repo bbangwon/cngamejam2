@@ -119,7 +119,7 @@ public class Villain : MonoBehaviour
 
     public void ChangeAction(EVillainAction nextAction)
     {
-        EditorDebug.LogFormat("[ºô·±] ChangeAction, {0} -> {1}", action, nextAction);
+        EditorDebug.LogFormat("[????] ChangeAction, {0} -> {1}", action, nextAction);
         action = nextAction;
 
         switch(action)
@@ -228,6 +228,7 @@ public class Villain : MonoBehaviour
     {
         HP--;
         EffectManager.Instance.SpawnAttackEffect(transform.position).Forget();
+        SoundManager.Instance.Play("03_hit");
 
         if (HP <= 0)
         {
@@ -336,12 +337,12 @@ public class Villain : MonoBehaviour
 
         //rb.MovePosition(transform.position + moveDir * MoveSpeed * Time.deltaTime);
         transform.Translate(moveDir * MoveSpeed * Time.deltaTime);
-        EditorDebug.Log("[ºô·±] Walk");
+        EditorDebug.Log("[????] Walk");
     }
 
     void Jump()
     {
-        EditorDebug.Log("[ºô·±] Jump");
+        EditorDebug.Log("[????] Jump");
         isJump = true;
         Vector2 jumpDir = transform.position.x > Player.Instance.transform.position.x ? jumpVector * new Vector2(-1f, 1f)  : jumpVector;
         rb.AddForce(jumpDir * jumpPower, ForceMode2D.Impulse);

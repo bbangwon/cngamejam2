@@ -47,6 +47,7 @@ namespace cngamejam
         public ReadOnlyReactiveProperty<int> CatchedEnemys => catchedEnemys.ToReadOnlyReactiveProperty();
 
         public UnityEvent OnDie = new UnityEvent();
+        public bool IsDie => State == States.DEAD;
 
         [SerializeField]
         GameObject cavePrefab;
@@ -105,8 +106,11 @@ namespace cngamejam
 
         public void Damage()
         {
+
+
             if (currentHp > 0)
             {
+                SoundManager.Instance.Play("07_hit_voice_pc");
                 currentHp--;
                 RemoveHP.Invoke(currentHp);
                 
@@ -195,11 +199,20 @@ namespace cngamejam
             }
         }
 
+        async void AttackSound()
+        {
+            SoundManager.Instance.Play("04_atk_pc");
+            await UniTask.Delay(400);
+            SoundManager.Instance.Play("04_atk_pc");
+        }
+
         async UniTask Attack()
         {
             if(State != States.ATTACK)
             {
                 State = States.ATTACK;
+
+                AttackSound();
                 await PlayAnimation("attack");
 
 
@@ -233,6 +246,7 @@ namespace cngamejam
                 {
                     caveSkills--;
                     RemoveCaveSkill.Invoke(caveSkills);
+                    SoundManager.Instance.Play("09_skill_train");
 
                     Duck();
                     GameObject cave = Instantiate(cavePrefab);
@@ -270,6 +284,7 @@ namespace cngamejam
             if(State != States.DEAD)
             {
                 State = States.DEAD;
+                characterController.Interactable = false;   
                 await PlayAnimation("dead", false);
 
                 OnDie?.Invoke();
@@ -290,7 +305,7 @@ namespace cngamejam
             skeletonAnimation.state.SetAnimation(0, anim, false);
 
             await UniTask.Delay(TimeSpan.FromSeconds(anim.Duration).Milliseconds);
-            if (gotoIdle)
+            if (gotoIdle && State != States.DEAD)
                 Idle();
         }
 
