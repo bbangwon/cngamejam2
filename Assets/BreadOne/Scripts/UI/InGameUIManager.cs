@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UniRx;
+using DG.Tweening;
 
 namespace cngamejam{
 
@@ -13,6 +14,9 @@ namespace cngamejam{
 
         [SerializeField]
         Transform transformCaves;
+
+        [SerializeField]
+        Transform transformCatchedEnemy;
 
         [SerializeField]
         TextMeshProUGUI textCatchedEnemy;
@@ -51,9 +55,16 @@ namespace cngamejam{
 
             Player.Instance.CatchedEnemys.Subscribe(catchedEnemys =>
             {
+                PulseCatchedEnemy();
                 textCatchedEnemy.text = $"x{catchedEnemys}";
             });
 
+        }
+
+        async void PulseCatchedEnemy()
+        {
+            await transformCatchedEnemy.transform.DOScale(1.2f, 0.15f).AsyncWaitForCompletion();
+            await transformCatchedEnemy.transform.DOScale(1f, 0.1f).AsyncWaitForCompletion();
         }
 
         void RemoveHP(int hp)
@@ -64,6 +75,14 @@ namespace cngamejam{
         void RemoveCaveSkill(int caveSkill)
         {
             Destroy(transformCaves.GetChild(transformCaves.childCount - 1).gameObject);
+        }
+
+        private void Update()
+        {
+            if(Input.GetKey(KeyCode.Alpha1))
+            {
+                PulseCatchedEnemy();
+            }
         }
     }
 
