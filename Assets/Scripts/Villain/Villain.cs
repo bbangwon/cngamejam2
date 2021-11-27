@@ -53,8 +53,8 @@ public class Villain : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("Player");
-        Init();
+        player ??= GameObject.Find("Player");
+        //Init();
     }
 
     void FixedUpdate()
@@ -88,11 +88,16 @@ public class Villain : MonoBehaviour
         coll ??= GetComponent<Collider2D>();
         coll.enabled = false;
 
-        HP = 1;//Spawner.Instance.VillainMaxHP;
+        HP = Spawner.Instance.VillainMaxHP;
         gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         isJump = false;
         ChangeAction(EVillainAction.Spawn);
+    }
+
+    public void SetPlayer(GameObject player)
+    {
+        this.player = player;
     }
 
     public void ChangeAction(EVillainAction nextAction)
