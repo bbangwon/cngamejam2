@@ -30,14 +30,14 @@ public class Spawner : MonoBehaviour
     float spawnWaitTime = 0;
 
     [SerializeField] Transform TrainParent;
-    [SerializeField] GameObject Player;
+    //[SerializeField] GameObject Player;
     [SerializeField] GameObject[] SpawnPrefabs;
     [SerializeField] bool TestMode;
 
     void Awake()
     {
         instance = this;
-        Player ??= GameObject.Find("Player");
+        //Player ??= GameObject.Find("Player");
         
         if (TestMode)
             TestSpanwerSetting();
@@ -50,7 +50,7 @@ public class Spawner : MonoBehaviour
         {
             spawnWaitTime = 0;
 
-            Villain villain = SpawnOrNull(Player.transform.position);
+            Villain villain = SpawnOrNull(cngamejam.Player.Instance.transform.position);
             
             if (villain == null)
                 return;
@@ -92,7 +92,7 @@ public class Spawner : MonoBehaviour
             villain = Instantiate(SpawnPrefabs[index], spawnPos, Quaternion.identity).GetComponent<Villain>();
 
         villain.spawnType = spawnType;
-        villain.SetPlayer(Player);
+        //villain.SetPlayer(Player);
         villain.Init();
 
         CurSpawnCount++;
