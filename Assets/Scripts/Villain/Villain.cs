@@ -244,12 +244,23 @@ public class Villain : MonoBehaviour
 
     void Dead()
     {
+        if (action == EVillainAction.Dead)
+            return;
+
         ChangeAction(EVillainAction.Dead);
         gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
 
         float pushValue = transform.position.x > cngamejam.Player.Instance.transform.position.x ? pushPower : -pushPower;
         rb.freezeRotation = false;
         rb.AddTorque(pushValue * 2f, ForceMode2D.Impulse);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name.Contains("cave"))
+        {
+            Dead();
+        }
     }
 
     bool IsTrain()
