@@ -129,12 +129,12 @@ namespace cngamejam
 
             if(State == States.IDLE || State == States.MOVE)
             {
-                if (Input.GetButtonDown("Fire1"))
+                if (Input.GetKeyDown(KeyCode.Z))
                 {
                     Attack().Forget();
                 }
 
-                if(Input.GetButtonDown("Fire2"))
+                if(Input.GetKeyDown(KeyCode.C))
                 {
                     SpawnCave().Forget();
                 }

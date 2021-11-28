@@ -53,7 +53,7 @@ namespace cngamejam{
 
             
 
-            if(Input.GetButton("Jump") && isGrounded)
+            if(Input.GetKeyDown(KeyCode.X) && isGrounded)
             {
                 rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpHeight);
             }

@@ -70,6 +70,7 @@ namespace cngamejam{
                 player.transform.DOMoveY(540f, 1f).SetEase(Ease.InQuad);
 
                 await Enemy.transform.DOMoveY(540f - 248f, 1f).SetDelay(0.5f).SetEase(Ease.InQuad).AsyncWaitForCompletion();
+                SoundManager.Instance.Play("10_title_voice");
 
                 await title_1.transform.DOMoveX(960f - 310f, 1f).AsyncWaitForCompletion();
 
