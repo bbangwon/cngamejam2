@@ -8,8 +8,6 @@ public class Spawner : MonoBehaviour
     static Spawner instance;
     public static Spawner Instance { get => instance; }
 
-    public float spawnRange = 20f;
-
     [SerializeField] int killCount;
     public int KillCount // 10마리당 스폰 1초씩 감소
     {
@@ -27,6 +25,22 @@ public class Spawner : MonoBehaviour
     public int SpawnSeconds = 10; // 최소 1초
     public int VillainMaxHP = 1; // 50마리당 1씩 증가, 최대 5
 
+    [Header("Instpactor Settings")]
+    public float spawnRange = 20f;
+
+    public int FirstSpawnCount = 1;
+    public int LastSpawnCount = 10;
+    public int CountPerKill = 10;
+
+    public int FirstSpawnSeconds = 7;
+    public int LastSpawnSeconds = 1;
+    public int SpawnPerKill = 10;
+
+    public int FirstVillainHP = 1;
+    public int LastVillainHP = 5;
+    public int HPPerKill = 50;
+
+
     //public int Level = 1; // 레벨에 따른 빌런 타입 증가
 
     float spawnWaitTime = 0;
@@ -42,6 +56,10 @@ public class Spawner : MonoBehaviour
         
         if (TestMode)
             TestSpanwerSetting();
+        else
+        {
+            MakeHard();
+        }
     }
 
     void Update()
@@ -67,9 +85,9 @@ public class Spawner : MonoBehaviour
 
     void MakeHard()
     {
-        MaxSpawnCount = Mathf.Max(1 + KillCount / 10, 10);
-        SpawnSeconds = Mathf.Max(1, 10 - KillCount / 10);
-        VillainMaxHP = Mathf.Min(1 + KillCount / 50, 5);
+        MaxSpawnCount = Mathf.Min(FirstSpawnCount + KillCount / CountPerKill, LastSpawnCount);
+        SpawnSeconds = Mathf.Max(LastSpawnSeconds, FirstSpawnSeconds - KillCount / SpawnPerKill);
+        VillainMaxHP = Mathf.Min(FirstVillainHP + KillCount / HPPerKill, LastVillainHP);
     }
 
     public Villain SpawnOrNull(Vector2 playerPos)

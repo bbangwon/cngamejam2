@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
-using DG.Tweening;
-using Spine.Unity;
 using cngamejam;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Spine.Unity;
+using System.Linq;
+using UnityEngine;
 
 public class Villain : MonoBehaviour
 {
@@ -76,6 +74,9 @@ public class Villain : MonoBehaviour
         if (Player.Instance.State == Player.States.DEAD)
             return;
 
+        // ¶³¾îÁø Àû Á×°Ô
+        if ((action == EVillainAction.Approach || action == EVillainAction.Attack) && transform.position.y < -6f)
+            Dead();
 
         if (CheckOverPlayer() && action != EVillainAction.Spawn)
         {
@@ -190,8 +191,8 @@ public class Villain : MonoBehaviour
 
         if (IsPlayer())
         {
-            attackDelay = Random.Range(1f, attackDelay);
-            isAttack = true;
+            //attackDelay = Random.Range(1f, attackDelay);
+            //isAttack = true;
 
             ChangeAction(EVillainAction.Attack);
         }
@@ -209,12 +210,20 @@ public class Villain : MonoBehaviour
     async void DelayedPlayerDamage()
     {
         await UniTask.Delay(800);
+
+        if (action == EVillainAction.Dead)
+            return;
+
         Player.Instance.Damage();
     }
 
     async void DelayedBulletAttack(Vector3 attackDir)
     {
         await UniTask.Delay(1000);
+        
+        if (action == EVillainAction.Dead)
+            return;
+
         Player.Instance.Damage();
 
         if (bulletPrefab == null)
@@ -250,7 +259,7 @@ public class Villain : MonoBehaviour
             }
         }
 
-        attackDelay = Random.Range(1f, attackDelay);
+        attackDelay = Random.Range(attackDelay - 1f, attackDelay + 1f);
         isAttack = true;
 
         if(attackType == EAttackType.Short)

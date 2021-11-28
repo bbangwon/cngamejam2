@@ -49,7 +49,7 @@ MonoBehaviour:
   MoveSpeed: 4
   rayDistance: 0.6
   attackRange: 7
-  attackDelay: 3
+  attackDelay: 5
   jumpPower: 8
   jumpVector: {x: 1, y: 2}
   pushPower: 0.6
