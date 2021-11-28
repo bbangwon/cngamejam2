@@ -26,13 +26,13 @@ public class Spawner : MonoBehaviour
     public int VillainMaxHP = 1; // 50마리당 1씩 증가, 최대 5
 
     [Header("Instpactor Settings")]
-    public float spawnRange = 20f;
+    public float spawnRange = 10f;
 
-    public int FirstSpawnCount = 1;
+    public int FirstSpawnCount = 3;
     public int LastSpawnCount = 10;
     public int CountPerKill = 10;
 
-    public int FirstSpawnSeconds = 7;
+    public int FirstSpawnSeconds = 3;
     public int LastSpawnSeconds = 1;
     public int SpawnPerKill = 10;
 
