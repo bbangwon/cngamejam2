@@ -206,6 +206,26 @@ public class Villain : MonoBehaviour
         }
     }
 
+    async void DelayedPlayerDamage()
+    {
+        await UniTask.Delay(800);
+        Player.Instance.Damage();
+    }
+
+    async void DelayedBulletAttack(Vector3 attackDir)
+    {
+        await UniTask.Delay(1000);
+        Player.Instance.Damage();
+
+        if (bulletPrefab == null)
+            EditorDebug.LogError("Cannot Find Bullet Prefab");
+
+        bullet bullet = Instantiate(bulletPrefab).GetComponent<bullet>();
+        bullet.SetStartPosition(ShotPos.position);
+        bullet.Shot(attackRange * attackDir.x);
+
+    }
+
     public void Attack()
     {
         if (IsPlayer() == false)
@@ -220,16 +240,13 @@ public class Villain : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, attackDir, attackRange, 1 << LayerMask.NameToLayer("Player"));
         if (hit.collider != null)
         {
-            hit.collider.GetComponent<Player>().Damage();
-
             if (attackType == EAttackType.Long)
             {
-                if (bulletPrefab == null)
-                    EditorDebug.LogError("Cannot Find Bullet Prefab");
-
-                bullet bullet = Instantiate(bulletPrefab).GetComponent<bullet>();
-                bullet.SetStartPosition(ShotPos.position);
-                bullet.Shot(attackRange * attackDir.x);
+                DelayedBulletAttack(attackDir);
+            }
+            else
+            {
+                DelayedPlayerDamage();
             }
         }
 
@@ -380,7 +397,7 @@ public class Villain : MonoBehaviour
     }
 
     /// <summary>
-    /// 플레이어 머리 위로 올라갔을 때 체크
+    /// ???????? ???? ???? ???????? ?? ????
     /// </summary>
     bool CheckOverPlayer()
     {
